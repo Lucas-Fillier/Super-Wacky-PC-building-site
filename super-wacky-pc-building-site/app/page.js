@@ -1,65 +1,69 @@
-import Image from "next/image";
+const featuredParts = [
+  { id: 1, name: 'AMD Ryzen 7 7800X3D', category: 'CPU', price: '$399.99', specs: '8-Core, 16-Thread, 96MB L3 Cache' },
+  { id: 2, name: 'NVIDIA RTX 4080 Super', category: 'GPU', price: '$999.00', specs: '16GB GDDR6X, 10240 Cuda Cores' },
+  { id: 3, name: 'Corsair Vengeance 32GB DDR5', category: 'Memory', price: '$114.99', specs: 'DDR5-6000, CL30' },
+  { id: 4, name: 'MSI MAG B650 TOMAHAWK WIFI', category: 'Motherboard', price: '$199.99', specs: 'AM5, ATX, PCIe 4.0' },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
+      <main className="min-h-screen bg-slate-900 text-slate-50 font-sans">
+
+        <nav className="flex items-center justify-between p-6 border-b border-slate-800 bg-slate-950">
+          <div className="text-2xl font-bold text-emerald-400 tracking-tight">Super Wacky PC Builder</div>
+          <ul className="flex space-x-6 text-sm font-medium text-slate-300">
+            <li className="hover:text-emerald-400 cursor-pointer transition-colors">Start a Build</li>
+            <li className="hover:text-emerald-400 cursor-pointer transition-colors">Browse Parts</li>
+            <li className="hover:text-emerald-400 cursor-pointer transition-colors">Completed Builds</li>
+          </ul>
+          <button className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-md font-semibold transition-colors">
+            Sign In
+          </button>
+        </nav>
+
+        <section className="flex flex-col items-center justify-center py-24 px-4 text-center bg-gradient-to-b from-slate-900 to-slate-800">
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-6">
+            Build Your Dream <span className="text-emerald-400">Machine.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg text-slate-400 max-w-2xl mb-10">
+            Select your components, check compatibility, and optimize your setup. From budget builds to enthusiast water-cooled rigs, piece it together here.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <button className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-lg font-bold rounded-lg shadow-lg shadow-emerald-500/20 transition-all hover:scale-105">
+            Start System Builder
+          </button>
+        </section>
+
+        <section className="max-w-7xl mx-auto py-16 px-6">
+          <div className="flex justify-between items-end mb-8">
+            <h2 className="text-3xl font-bold">Trending Hardware</h2>
+            <span className="text-emerald-400 text-sm font-semibold cursor-pointer hover:underline">View All Components &rarr;</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredParts.map((part) => (
+                <div key={part.id} className="bg-slate-800 rounded-xl p-5 border border-slate-700 hover:border-emerald-400/50 transition-colors group cursor-pointer">
+                  <div className="aspect-square bg-slate-900 rounded-lg mb-4 flex items-center justify-center text-slate-600 group-hover:text-emerald-400 transition-colors">
+                    <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                    </svg>
+                  </div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{part.category}</div>
+                  <h3 className="text-lg font-bold text-slate-100 mb-1 truncate" title={part.name}>{part.name}</h3>
+                  <p className="text-xs text-slate-400 mb-4 h-8">{part.specs}</p>
+                  <div className="flex justify-between items-center mt-auto">
+                    <span className="text-xl font-bold text-emerald-400">{part.price}</span>
+                    <button className="p-2 bg-slate-700 hover:bg-emerald-500 hover:text-slate-950 rounded-md transition-colors text-sm font-medium">
+                      + Add
+                    </button>
+                  </div>
+                </div>
+            ))}
+          </div>
+        </section>
+
+        <footer className="border-t border-slate-800 mt-12 py-8 text-center text-slate-500 text-sm bg-slate-950">
+          <p>&copy; {new Date().getFullYear()} Super Wacky PC Builder. All rights reserved.</p>
+        </footer>
       </main>
-    </div>
   );
 }
