@@ -13,13 +13,13 @@ export default function BrowseParts() {
     const categories = Object.keys(groupedParts);
 
     return (
-        <main className="flex flex-col flex-grow min-h-screen">
+        <main className="flex flex-col flex-grow min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
 
-            <section className="bg-slate-950 py-16 px-6 border-b border-slate-800 text-center">
-                <h1 className="text-4xl font-extrabold mb-4">
-                    Hardware <span className="text-emerald-400">Inventory</span>
+            <section className="bg-white dark:bg-slate-950 py-16 px-6 border-b border-slate-200 dark:border-slate-800 text-center transition-colors duration-200">
+                <h1 className="text-4xl font-extrabold mb-4 text-slate-900 dark:text-white">
+                    Hardware <span className="text-emerald-600 dark:text-emerald-400">Inventory</span>
                 </h1>
-                <p className="text-slate-400 max-w-xl mx-auto">
+                <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
                     Browse our extensive collection of high-performance components and incredibly questionable prototypes.
                 </p>
             </section>
@@ -30,27 +30,28 @@ export default function BrowseParts() {
                     <div key={category} className="mb-16">
 
                         <div className="flex items-center mb-6">
-                            <h2 className="text-3xl font-bold text-slate-100">{category}</h2>
-                            <div className="flex-grow h-px bg-slate-800 ml-6"></div>
+                            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100">{category}</h2>
+                            <div className="flex-grow h-px bg-slate-200 dark:bg-slate-800 ml-6 transition-colors duration-200"></div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {groupedParts[category].map((part) => (
-                                <div key={part.id} className="bg-slate-800 rounded-xl p-5 border border-slate-700 hover:border-emerald-400/50 transition-colors group cursor-pointer flex flex-col">
 
-                                    <div className="aspect-square bg-slate-900 rounded-lg mb-4 flex items-center justify-center text-slate-600 group-hover:text-emerald-400 transition-colors">
+                                <div key={part.id} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors group cursor-pointer flex flex-col shadow-sm">
+
+                                    <div className="aspect-square bg-slate-50 dark:bg-slate-900 rounded-lg mb-4 flex items-center justify-center text-slate-400 dark:text-slate-600 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
                                         <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
                                         </svg>
                                     </div>
 
-                                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{part.category}</div>
-                                    <h3 className="text-lg font-bold text-slate-100 mb-1 leading-tight">{part.name}</h3>
-                                    <p className="text-xs text-slate-400 mb-6 flex-grow">{part.specs}</p>
+                                    <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">{part.category}</div>
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1 leading-tight">{part.name}</h3>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 flex-grow">{part.specs}</p>
 
-                                    <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-700/50">
-                                        <span className="text-xl font-bold text-emerald-400">{part.price}</span>
-                                        <button className="p-2 bg-slate-700 hover:bg-emerald-500 hover:text-slate-950 rounded-md transition-colors text-sm font-medium">
+                                    <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-200 dark:border-slate-700/50">
+                                        <span className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{part.price}</span>
+                                        <button className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-500 dark:hover:bg-emerald-500 text-slate-700 dark:text-slate-300 hover:text-white dark:hover:text-slate-950 rounded-md transition-colors text-sm font-medium">
                                             + Add
                                         </button>
                                     </div>
@@ -63,7 +64,7 @@ export default function BrowseParts() {
                 ))}
             </div>
 
-            <footer className="border-t border-slate-800 mt-auto py-8 text-center text-slate-500 text-sm bg-slate-950 w-full">
+            <footer className="border-t border-slate-200 dark:border-slate-800 mt-auto py-8 text-center text-slate-500 dark:text-slate-500 text-sm bg-slate-50 dark:bg-slate-950 w-full transition-colors duration-200">
                 <p>&copy; {new Date().getFullYear()} Super Wacky PC Builder. All rights reserved.</p>
             </footer>
         </main>
