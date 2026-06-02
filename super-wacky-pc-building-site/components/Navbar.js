@@ -10,6 +10,7 @@ export default function Navbar() {
                 <Link href="/build" className="hover:text-emerald-400 cursor-pointer transition-colors">Start a Build</Link>
                 <Link href="/parts" className="hover:text-emerald-400 cursor-pointer transition-colors">Browse Parts</Link>
                 <Link href="/contact" className="hover:text-emerald-400 cursor-pointer transition-colors">Contact</Link>
+                <Link href="/about" className="hover:text-emerald-400 cursor-pointer transition-colors">About Us</Link>
             </ul>
 
             <button className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-md font-semibold transition-colors">

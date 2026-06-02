@@ -10,11 +10,11 @@ export default function AboutPage(){
             <h3>What It Does (Or Will Do Soon!)</h3>
             <h4>Part Compatibility</h4>
             <p>Making sure your motherboard actually fits your case and supports your processor so you don't waste money.</p>
-            <h5>Keeping Track of Costs</h5>\
+            <h4>Keeping Track of Costs</h4>
             <p>PC parts get expensive fast. We're adding a way to track your total budget as you add components to your build.</p>
-            <h6>AI Checkups</h6>
+            <h4>AI Checkups</h4>
             <p>Later on we plan on attempting to hook up an AI API to look at your build and warn you if your parts are mismatched.</p>
-            <h7>Saving Builds</h7>
+            <h4>Saving Builds</h4>
             <p>Once we hook up the database, you'll be able to log in, save your dream builds, and come back to them later.</p>
         </div>
     );
