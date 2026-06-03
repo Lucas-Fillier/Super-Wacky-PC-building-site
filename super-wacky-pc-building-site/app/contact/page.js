@@ -1,3 +1,5 @@
+import Footer from '../../components/Footer';
+
 export default function Contact() {
     return (
         <main className="flex flex-col flex-grow">
@@ -27,9 +29,7 @@ export default function Contact() {
                 </div>
             </section>
 
-            <footer className="border-t border-slate-800 mt-auto py-8 text-center text-slate-500 text-sm bg-slate-950 w-full">
-                <p>&copy; {new Date().getFullYear()} Super Wacky PC Builder. All rights reserved.</p>
-            </footer>
+            <Footer/>
         </main>
     );
 }

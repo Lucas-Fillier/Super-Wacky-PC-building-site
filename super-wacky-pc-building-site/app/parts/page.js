@@ -1,5 +1,5 @@
-
 import { pcParts } from '../../data/parts';
+import Footer from '../../components/Footer';
 
 export default function BrowseParts() {
     const groupedParts = pcParts.reduce((acc, part) => {
@@ -64,9 +64,7 @@ export default function BrowseParts() {
                 ))}
             </div>
 
-            <footer className="border-t border-slate-200 dark:border-slate-800 mt-auto py-8 text-center text-slate-500 dark:text-slate-500 text-sm bg-slate-50 dark:bg-slate-950 w-full transition-colors duration-200">
-                <p>&copy; {new Date().getFullYear()} Super Wacky PC Builder. All rights reserved.</p>
-            </footer>
+            <Footer/>
         </main>
     );
 }
