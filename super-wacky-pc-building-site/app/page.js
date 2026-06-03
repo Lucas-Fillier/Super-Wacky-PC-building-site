@@ -1,5 +1,4 @@
 import { pcParts } from '../data/parts';
-import Footer from '../components/Footer';
 
 export default function Home() {
     const featuredParts = pcParts.slice(0, 4);
@@ -44,7 +43,6 @@ export default function Home() {
             </div>
         </section>
 
-    <Footer/>
 </main>
 );
 }

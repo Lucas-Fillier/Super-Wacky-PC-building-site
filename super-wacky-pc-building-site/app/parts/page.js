@@ -64,7 +64,6 @@ export default function BrowseParts() {
                 ))}
             </div>
 
-            <Footer/>
         </main>
     );
 }
