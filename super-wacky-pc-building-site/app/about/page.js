@@ -1,7 +1,9 @@
+import Footer from '../../components/Footer';
+
 export default function AboutPage() {
         return (
-            <main className="min-h-screen bg-slate-50 dark:bg-slate-900 py-16 px-6 text-slate-900 dark:text-slate-100 transition-colors duration-200 flex flex-col flex-grow">
-                    <div className="max-w-4xl mx-auto space-y-12 w-full">
+            <main className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-200 flex flex-col justify-between">
+                    <div className="max-w-4xl mx-auto pt-16 pb-24 px-6 space-y-12 w-full">
 
                             <section className="text-center space-y-4">
                                     <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
@@ -51,6 +53,7 @@ export default function AboutPage() {
                                     </div>
                             </section>
                     </div>
+                    <Footer/>
             </main>
         );
 }
