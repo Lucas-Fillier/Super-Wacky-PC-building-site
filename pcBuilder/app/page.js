@@ -1,5 +1,5 @@
 import { pcParts } from '../data/parts';
-//import Link from "next/link";
+import Link from "next/link";
 import PartImage from '../components/PartImage';
 
 export default function Home() {
@@ -14,14 +14,14 @@ export default function Home() {
                 <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mb-10">
                     Select your components, check compatibility, and optimize your setup. From budget builds to enthusiast water-cooled rigs, piece it together here.
                 </p>
-                <button className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-white dark:text-slate-950 text-lg font-bold rounded-lg shadow-lg shadow-emerald-500/20 transition-all hover:scale-105">
+                <Link href="/build" className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-white dark:text-slate-950 text-lg font-bold rounded-lg shadow-lg shadow-emerald-500/20 transition-all hover:scale-105">
                     Start System Builder
-                </button>
+                </Link>
             </section>
             <section className="max-w-7xl mx-auto py-16 px-6">
                 <div className="flex justify-between items-end mb-8">
                     <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Trending Hardware</h2>
-                    <span className="text-emerald-600 dark:text-emerald-400 text-sm font-semibold cursor-pointer hover:underline">View All Components &rarr;</span>
+                    <Link href="/parts" className="text-emerald-600 dark:text-emerald-400 text-sm font-semibold cursor-pointer hover:underline">View All Components &rarr;</Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {featuredParts.map((part) => (
