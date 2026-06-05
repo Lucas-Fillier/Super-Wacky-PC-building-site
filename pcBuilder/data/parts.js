@@ -2,7 +2,7 @@
 export const pcParts = [
 
     { id: 1, name: 'AMD Ryzen 7 7800X3D', category: 'CPU', price: '$399.99', specs: '8-Core, 16-Thread, 96MB L3 Cache', image: '/Images/AMD-Ryzen7-7800X3D.png' },
-    { id: 5, name: 'Intel Core i9-14900K', category: 'CPU', price: '$589.99', specs: '24-Core, 32-Thread, Up to 6.0 GHz', image: "/Images/Intel-Core-I9-14900k-1.png" },
+    { id: 5, name: 'Intel Core i9-14900K', category: 'CPU', price: '$589.99', specs: '24-Core, 32-Thread, Up to 6.0 GHz', image: "/Images/Intel-Core-I9-14900k.png" },
     { id: 6, name: 'Silph Co. Quantum Porygon-Z', category: 'CPU', price: '$9,999.00', specs: 'Undefined Cores, Glitch-Threaded' },
 
     { id: 2, name: 'NVIDIA RTX 4080 Super', category: 'GPU', price: '$999.00', specs: '16GB GDDR6X, 10240 Cuda Cores', image:'/Images/RTX-4080-Super.png'},

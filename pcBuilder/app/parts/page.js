@@ -1,5 +1,5 @@
 import { pcParts } from '../../data/parts';
-import Footer from '../../components/Footer';
+import PartImage from '../../components/PartImage';
 
 export default function BrowseParts() {
     const groupedParts = pcParts.reduce((acc, part) => {
@@ -39,11 +39,7 @@ export default function BrowseParts() {
 
                                 <div key={part.id} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors group cursor-pointer flex flex-col shadow-sm">
 
-                                    <div className="aspect-square bg-slate-50 dark:bg-slate-900 rounded-lg mb-4 flex items-center justify-center text-slate-400 dark:text-slate-600 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
-                                        <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
-                                        </svg>
-                                    </div>
+                                    <PartImage part = {part}/>
 
                                     <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">{part.category}</div>
                                     <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1 leading-tight">{part.name}</h3>
