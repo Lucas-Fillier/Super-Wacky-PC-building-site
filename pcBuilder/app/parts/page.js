@@ -1,4 +1,5 @@
 import { pcParts } from '../../data/parts';
+import Footer from '../../components/Footer';
 
 export default function BrowseParts() {
     const groupedParts = pcParts.reduce((acc, part) => {
