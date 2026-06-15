@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import PartImage from "@/components/PartImage";
 
 export default function BuildPage() {
     const router = useRouter();
@@ -47,7 +48,6 @@ export default function BuildPage() {
 
             <div className="max-w-7xl mx-auto py-12 px-6 w-full flex flex-col lg:flex-row gap-8">
 
-                {/* Left Column: Parts Selection */}
                 <div className="lg:w-2/3">
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-6 border-b border-slate-200 dark:border-slate-800 pb-2">
                         Available Components
@@ -68,7 +68,8 @@ export default function BuildPage() {
                     {!isLoading && !error && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {parts.map((part) => (
-                                <div key={part.id} className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors shadow-sm flex flex-col">
+                                <div key={part._id || part.id} className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors shadow-sm flex flex-col">
+                                    <PartImage part = {part}/>
                                     <div className="flex justify-between items-start mb-2">
                                         <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{part.category}</span>
                                         <span className="font-bold text-emerald-600 dark:text-emerald-400">{part.price}</span>
