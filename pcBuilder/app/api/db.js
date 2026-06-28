@@ -1,26 +1,29 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
-let cachedClient = null;
-let cachedDb = null;
+const uri = process.env.MONGODB_URI;
 
-export async function connectToDB() {
-    if (cachedClient != null && cachedDb != null) {
-        return {client: cachedClient, db: cachedDb}
-    }
+if (!uri) {
+    throw new Error(
+        'Please define the MONGODB_URI environment variable in .env.local'
+    );
+}
 
-    const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@super-wacky-cluster.ymz2op1.mongodb.net/?appName=super-wacky-cluster`;
+let cached = global._mongoClientPromise;
 
+if (!cached) {
     const client = new MongoClient(uri, {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
             deprecationErrors: true,
-        }
+        },
     });
-    await client.connect();
 
-    cachedClient = client;
-    cachedDb = cachedClient.db('super_wacky_db');
+    cached = global._mongoClientPromise = client.connect();
+}
 
-    return {client: cachedClient, db: cachedDb};
+export async function connectToDB(dbName = 'super_wacky_db') {
+    const client = await cached;
+    const db = client.db(dbName);
+    return { client, db };
 }
