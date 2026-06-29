@@ -70,7 +70,7 @@ export default async function BrowseParts() {
                         <Link
                             href="/add-part"
                             className="w-full block text-center py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg transition-all">
-                            + Add Custom Component
+                            Add Component
                         </Link>
                     </div>
                 </aside>

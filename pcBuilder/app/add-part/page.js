@@ -51,6 +51,16 @@ export default function AddPartPage() {
                         ></textarea>
                     </div>
 
+                    <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Image URL</label>
+                        <input
+                            name="partImage"
+                            placeholder="Image URL (e.g., from Imgur)"
+                            required
+                            className="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+                        />
+                    </div>
+
                     <button
                         type="submit"
                         className="w-full mt-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 px-4 rounded-lg shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.02]"

@@ -28,12 +28,14 @@ export async function POST(request) {
         const category = formData.get('partCategory');
         const price = formData.get('partPrice');
         const specs = formData.get('partSpecs');
+        const image = formData.get('partImage');
 
         await db.collection('parts').insertOne({
             name,
             category,
             price,
             specs,
+            image,
             createdAt: new Date()
         });
 
