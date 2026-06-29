@@ -1,10 +1,18 @@
 
 import { NextResponse } from 'next/server';
-import { pcParts } from '@/data/parts';
+import clientPromise from '../../../lib/mongodb';
 
 export async function GET() {
+    try {
+        const client = await clientPromise;
 
-    await new Promise((resolve) => setTimeout(resolve, 800));
+        const db = client.db("wacky_pc_db");
 
-    return NextResponse.json(pcParts);
+        const parts = await db.collection("parts").find({}).toArray();
+
+        return NextResponse.json(parts);
+    } catch (error) {
+        console.error("Database connection failed", error);
+        return NextResponse.json({ error: "Failed to fetch hardware data" }, { status: 500 });
+    }
 }
