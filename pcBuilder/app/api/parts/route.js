@@ -1,7 +1,6 @@
 
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
-import {revalidatePath} from "next/cache";
 
 export async function GET() {
     try {
@@ -20,31 +19,22 @@ export async function GET() {
 
 export async function POST(request) {
     try {
+
+        const body = await request.json();
+
         const client = await clientPromise;
+
         const db = client.db("wacky_pc_db");
 
-        const formData = await request.formData();
-        const name = formData.get('partName');
-        const category = formData.get('partCategory');
-        const price = formData.get('partPrice');
-        const specs = formData.get('partSpecs');
-        const image = formData.get('partImage');
+        const result = await db.collection("parts").insertOne(body);
 
-        await db.collection('parts').insertOne({
-            name,
-            category,
-            price,
-            specs,
-            image,
-            createdAt: new Date()
-        });
+        return NextResponse.json({
+            message: "Part successfully added!",
+            insertedId: result.insertedId
+        }, { status: 201 });
 
-        revalidatePath('/parts');
-
-        return Response.redirect(new URL('/parts', request.url), 303);
     } catch (error) {
-        console.error("Database entry error:", error);
-        return NextResponse.json({error: "Failed to save new component"}, {status: 500});
+        console.error("Failed to create part", error);
+        return NextResponse.json({ error: "Failed to add part to database" }, { status: 500 });
     }
 }
-
