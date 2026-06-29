@@ -1,7 +1,11 @@
-import { pcParts } from '../../data/parts';
+import clientPromise from '../../lib/mongodb';
 import PartImage from '../../components/PartImage';
 
-export default function BrowseParts() {
+export default async function BrowseParts() {
+    const client = await clientPromise;
+    const db = client.db("wacky_pc_db");
+    const pcParts = await db.collection("parts").find({}).toArray();
+
     const groupedParts = pcParts.reduce((acc, part) => {
         if (!acc[part.category]) {
             acc[part.category] = [];
@@ -37,7 +41,7 @@ export default function BrowseParts() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {groupedParts[category].map((part) => (
 
-                                <div key={part.id} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors group cursor-pointer flex flex-col shadow-sm">
+                                <div key={part._id?.toString() || part.id} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors group cursor-pointer flex flex-col shadow-sm">
 
                                     <PartImage part = {part}/>
 
