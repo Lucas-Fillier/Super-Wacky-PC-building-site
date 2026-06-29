@@ -1,9 +1,12 @@
-import { pcParts } from '../data/parts';
 import Link from "next/link";
+import clientPromise from '../lib/mongodb';
 import PartImage from '../components/PartImage';
 
-export default function Home() {
-    const featuredParts = pcParts.slice(0, 4);
+export default async function Home() {
+    const client = await clientPromise;
+    const db = client.db("wacky_pc_db");
+
+    const featuredParts = await db.collection("parts").find({}).limit(4).toArray();
 
     return (
         <main>
@@ -25,7 +28,7 @@ export default function Home() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {featuredParts.map((part) => (
-                        <div key={part.id} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors group cursor-pointer shadow-sm">
+                        <div key={part._id?.toString() || part.id} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors group cursor-pointer shadow-sm flex flex-col">
                             <PartImage part = {part}/>
                             <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">{part.category}</div>
                             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1 truncate" title={part.name}>{part.name}</h3>
