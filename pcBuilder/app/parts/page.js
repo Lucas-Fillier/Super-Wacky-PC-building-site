@@ -1,5 +1,6 @@
 import clientPromise from '../../lib/mongodb';
 import PartImage from '../../components/PartImage';
+import Link from "next/link";
 
 export default async function BrowseParts() {
     const client = await clientPromise;
@@ -26,6 +27,12 @@ export default async function BrowseParts() {
                 <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
                     Browse our extensive collection of high-performance components and incredibly questionable prototypes.
                 </p>
+                <Link
+                    href="/add-part"
+                    className="inline-block px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg shadow-lg shadow-emerald-500/20 transition-transform hover:scale-105"
+                >
+                    + Add Custom Component
+                </Link>
             </section>
 
             <div className="max-w-7xl mx-auto py-12 px-6 w-full">
