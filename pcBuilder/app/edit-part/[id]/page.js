@@ -64,7 +64,30 @@ export default function EditPart({ params }) {
         }
     };
 
-    if (isLoading) return <div className="text-center py-24 text-slate-500">Loading part data...</div>;
+    const handleDelete = async () => {
+        const confirmDelete = window.confirm("Are you sure you want to permanently delete this part?");
+        if (!confirmDelete) return;
+
+        setIsSubmitting(true);
+        setStatus({ type: '', message: '' });
+
+        try {
+            const response = await fetch(`/api/parts/${partId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) throw new Error('Failed to delete part');
+
+            setStatus({ type: 'success', message: 'Part permanently deleted.' });
+            setTimeout(() => router.push('/parts'), 1500); // Redirect after success
+
+        } catch (error) {
+            setStatus({ type: 'error', message: error.message });
+            setIsSubmitting(false);
+        }
+    };
+
+    if (isLoading) return <div className="text-center py-24 text-slate-500 font-bold">Loading part data...</div>;
 
     return (
         <main className="flex flex-col flex-grow bg-slate-50 dark:bg-slate-900 min-h-screen py-16 px-6">
@@ -78,7 +101,7 @@ export default function EditPart({ params }) {
                 </div>
 
                 {status.message && (
-                    <div className={`p-4 rounded-lg mb-6 text-sm font-bold ${status.type === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+                    <div className={`p-4 rounded-lg mb-6 text-sm font-bold ${status.type === 'success' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
                         {status.message}
                     </div>
                 )}
@@ -113,9 +136,25 @@ export default function EditPart({ params }) {
                         <input type="text" id="specs" required value={formData.specs} onChange={handleChange} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none" />
                     </div>
 
-                    <button type="submit" disabled={isSubmitting} className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 text-white font-bold py-4 rounded-lg transition-all mt-4">
-                        {isSubmitting ? 'Saving...' : 'Update Part'}
-                    </button>
+                    <div className="flex gap-4 mt-8 pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="flex-grow bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 text-white font-bold py-4 rounded-lg transition-all"
+                        >
+                            {isSubmitting ? 'Processing...' : 'Update Part'}
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={handleDelete}
+                            disabled={isSubmitting}
+                            className="px-6 bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/20 dark:hover:bg-red-900/40 dark:text-red-400 font-bold rounded-lg transition-all"
+                        >
+                            Delete
+                        </button>
+                    </div>
+
                 </form>
 
             </div>

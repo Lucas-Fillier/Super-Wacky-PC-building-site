@@ -59,7 +59,16 @@ export default async function BrowseParts() {
                                         <p className="text-xs text-slate-500 mb-6 flex-grow">{part.specs}</p>
                                         <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
                                             <span className="text-xl font-bold text-emerald-600">{part.price}</span>
+
                                             <div className="flex gap-2">
+
+                                                <Link
+                                                    href={`/edit-part/${part._id?.toString() || part.id}`}
+                                                    className="flex items-center px-3 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 hover:border-emerald-500 text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 rounded-md transition-colors text-sm font-medium"
+                                                >
+                                                    Edit
+                                                </Link>
+
                                                 <form action={deletePart}>
                                                     <input type="hidden" name="id" value={part._id?.toString() || part.id} />
                                                     <button
@@ -68,6 +77,7 @@ export default async function BrowseParts() {
                                                         Delete
                                                     </button>
                                                 </form>
+
                                             </div>
                                         </div>
                                     </div>
@@ -92,5 +102,5 @@ export default async function BrowseParts() {
                     </div>
                 </aside>
             </div>
-    </main>
-)};
+        </main>
+    )};
