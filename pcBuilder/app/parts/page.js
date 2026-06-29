@@ -20,19 +20,25 @@ export default async function BrowseParts() {
     return (
         <main className="flex flex-col flex-grow min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
 
-            <section className="bg-white dark:bg-slate-950 py-16 px-6 border-b border-slate-200 dark:border-slate-800 text-center transition-colors duration-200">
-                <h1 className="text-4xl font-extrabold mb-4 text-slate-900 dark:text-white">
-                    Hardware <span className="text-emerald-600 dark:text-emerald-400">Inventory</span>
-                </h1>
-                <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-                    Browse our extensive collection of high-performance components and incredibly questionable prototypes.
-                </p>
-                <Link
-                    href="/add-part"
-                    className="inline-block px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg shadow-lg shadow-emerald-500/20 transition-transform hover:scale-105"
-                >
-                    + Add Custom Component
-                </Link>
+            <section className="bg-white dark:bg-slate-950 py-20 px-6 border-b border-slate-200 dark:border-slate-800 text-center transition-colors duration-200">
+                <div className="max-w-2xl mx-auto">
+                    <h1 className="text-4xl font-extrabold mb-4 text-slate-900 dark:text-white">
+                        Hardware <span className="text-emerald-600 dark:text-emerald-400">Inventory</span>
+                    </h1>
+                    <p className="text-slate-600 dark:text-slate-400 mb-10">
+                        Browse our extensive collection of high-performance components and incredibly questionable prototypes.
+                    </p>
+
+                    <div className="pt-2">
+                        <Link
+                            href="/add-part"
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4"></path></svg>
+                            Add Custom Component
+                        </Link>
+                    </div>
+                </div>
             </section>
 
             <div className="max-w-7xl mx-auto py-12 px-6 w-full">
