@@ -1,7 +1,6 @@
 import clientPromise from '../../lib/mongodb';
 import PartImage from '../../components/PartImage';
 import Link from "next/link";
-import Footer from "../../components/Footer";
 
 export default async function BrowseParts() {
     const client = await clientPromise;
