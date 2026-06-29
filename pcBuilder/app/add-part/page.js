@@ -8,7 +8,8 @@ export default function AddPart() {
         name: '',
         category: 'CPU',
         price: '',
-        specs: ''
+        specs: '',
+        image: ''
     });
 
     const [status, setStatus] = useState({ type: '', message: '' });
@@ -35,7 +36,7 @@ export default function AddPart() {
 
             setStatus({ type: 'success', message: 'Awesome! New wacky part added to the database.' });
 
-            setFormData({ name: '', category: 'CPU', price: '', specs: '' });
+            setFormData({ name: '', category: 'CPU', price: '', specs: '', image: '' });
         } catch (error) {
             setStatus({ type: 'error', message: error.message });
         } finally {
@@ -88,6 +89,11 @@ export default function AddPart() {
                     <div className="space-y-2">
                         <label htmlFor="specs" className="text-sm font-semibold text-slate-700 dark:text-slate-300">Short Specifications</label>
                         <input type="text" id="specs" required value={formData.specs} onChange={handleChange} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="e.g. 16 Cores, Overheats instantly" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label htmlFor="image" className="text-sm font-semibold text-slate-700 dark:text-slate-300">Image URL</label>
+                        <input type="text" id="image" required value={formData.image} onChange={handleChange} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="https://i.imgur.com/yourimage.jpg" />
                     </div>
 
                     <button type="submit" disabled={isSubmitting} className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 text-white font-bold py-4 rounded-lg transition-all mt-4">
