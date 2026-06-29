@@ -35,9 +35,11 @@ export default async function Home() {
                             <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 h-8">{part.specs}</p>
                             <div className="flex justify-between items-center mt-auto">
                                 <span className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{part.price}</span>
-                                <button className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-500 dark:hover:bg-emerald-500 text-slate-700 dark:text-slate-300 hover:text-white dark:hover:text-slate-950 rounded-md transition-colors text-sm font-medium">
-                                    + Add
-                                </button>
+                                <Link
+                                    href="/build"
+                                    className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-500 dark:hover:bg-emerald-500 text-slate-700 dark:text-slate-300 hover:text-white dark:hover:text-slate-950 rounded-md transition-colors text-sm font-medium">
+                                    Build With This
+                                </Link>
                             </div>
                         </div>
                     ))}
