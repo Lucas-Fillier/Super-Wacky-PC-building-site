@@ -1,6 +1,7 @@
 import clientPromise from '../../lib/mongodb';
 import PartImage from '../../components/PartImage';
 import Link from "next/link";
+import Footer from "../../components/Footer";
 
 export default async function BrowseParts() {
     const client = await clientPromise;
@@ -28,55 +29,51 @@ export default async function BrowseParts() {
                     <p className="text-slate-600 dark:text-slate-400 mb-10">
                         Browse our extensive collection of high-performance components and incredibly questionable prototypes.
                     </p>
-
-                    <div className="pt-2">
-                        <Link
-                            href="/add-part"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4"></path></svg>
-                            Add Custom Component
-                        </Link>
-                    </div>
                 </div>
             </section>
 
-            <div className="max-w-7xl mx-auto py-12 px-6 w-full">
+            <div className="max-w-7xl mx-auto py-12 px-6 w-full flex flex-col lg:flex-row gap-8">
+                <div className="lg:w-2/3">
+                    {categories.map((category) => (
+                        <div key={category} className="mb-16">
+                            <div className="flex items-center mb-6 border-b border-slate-200 dark:border-slate-800 pb-2">
+                                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{category}</h2>
+                            </div>
 
-                {categories.map((category) => (
-                    <div key={category} className="mb-16">
-
-                        <div className="flex items-center mb-6">
-                            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100">{category}</h2>
-                            <div className="flex-grow h-px bg-slate-200 dark:bg-slate-800 ml-6 transition-colors duration-200"></div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {groupedParts[category].map((part) => (
-
-                                <div key={part._id?.toString() || part.id} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors group cursor-pointer flex flex-col shadow-sm">
-
-                                    <PartImage part = {part}/>
-
-                                    <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">{part.category}</div>
-                                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1 leading-tight">{part.name}</h3>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 flex-grow">{part.specs}</p>
-
-                                    <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-200 dark:border-slate-700/50">
-                                        <span className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{part.price}</span>
-                                        <button className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-500 dark:hover:bg-emerald-500 text-slate-700 dark:text-slate-300 hover:text-white dark:hover:text-slate-950 rounded-md transition-colors text-sm font-medium">
-                                            + Add
-                                        </button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {groupedParts[category].map((part) => (
+                                    <div key={part._id?.toString() || part.id} className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col">
+                                        <PartImage part={part} />
+                                        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mt-2">{part.category}</div>
+                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">{part.name}</h3>
+                                        <p className="text-xs text-slate-500 mb-6 flex-grow">{part.specs}</p>
+                                        <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
+                                            <span className="text-xl font-bold text-emerald-600">{part.price}</span>
+                                            <button className="p-2 bg-slate-100 hover:bg-emerald-500 text-slate-700 hover:text-white rounded-md transition-colors text-sm font-medium">
+                                                + Add
+                                            </button>
+                                        </div>
                                     </div>
-
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-
+                    ))}
+                </div>
+                <aside className="lg:w-1/3">
+                    <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-xl sticky top-6">
+                        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">
+                            Inventory Tools
+                        </h2>
+                        <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+                            Have a new part design? Add it to the official database now.
+                        </p>
+                        <Link
+                            href="/add-part"
+                            className="w-full block text-center py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg transition-all">
+                            + Add Custom Component
+                        </Link>
                     </div>
-                ))}
+                </aside>
             </div>
-
-        </main>
-    );
-}
+    </main>
+)};
