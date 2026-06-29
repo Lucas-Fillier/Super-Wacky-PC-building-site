@@ -1,8 +1,19 @@
 import clientPromise from '../../lib/mongodb';
 import PartImage from '../../components/PartImage';
 import Link from "next/link";
+import {ObjectId} from "mongodb";
+import {revalidatePath} from "next/cache";
 
 export default async function BrowseParts() {
+    async function deletePart(formData){
+        "use server";
+        const id = formData.get("id");
+        const client = await clientPromise;
+        const db = client.db("wacky_pc_db");
+        await db.collection('parts').deleteOne( { _id: new ObjectId(id)});
+        revalidatePath('/parts')
+
+    }
     const client = await clientPromise;
     const db = client.db("wacky_pc_db");
     const pcParts = await db.collection("parts").find({}).toArray();
@@ -48,9 +59,19 @@ export default async function BrowseParts() {
                                         <p className="text-xs text-slate-500 mb-6 flex-grow">{part.specs}</p>
                                         <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
                                             <span className="text-xl font-bold text-emerald-600">{part.price}</span>
-                                            <button className="p-2 bg-slate-100 hover:bg-emerald-500 text-slate-700 hover:text-white rounded-md transition-colors text-sm font-medium">
-                                                + Add
-                                            </button>
+                                            <div className="flex gap-2">
+                                                <button className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-500 dark:hover:bg-emerald-500 text-slate-700 dark:text-slate-300 hover:text-white dark:hover:text-slate-950 rounded-md transition-colors text-sm font-medium">
+                                                    + Add
+                                                </button>
+                                                <form action={deletePart}>
+                                                    <input type="hidden" name="id" value={part._id?.toString() || part.id} />
+                                                    <button
+                                                        type="submit"
+                                                        className="p-2 bg-red-100 dark:bg-red-900/30 hover:bg-red-500 dark:hover:bg-red-500 text-red-700 dark:text-red-400 hover:text-white dark:hover:text-white rounded-md transition-colors text-sm font-medium">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
