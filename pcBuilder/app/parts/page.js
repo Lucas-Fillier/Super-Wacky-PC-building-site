@@ -60,9 +60,6 @@ export default async function BrowseParts() {
                                         <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
                                             <span className="text-xl font-bold text-emerald-600">{part.price}</span>
                                             <div className="flex gap-2">
-                                                <button className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-500 dark:hover:bg-emerald-500 text-slate-700 dark:text-slate-300 hover:text-white dark:hover:text-slate-950 rounded-md transition-colors text-sm font-medium">
-                                                    + Add
-                                                </button>
                                                 <form action={deletePart}>
                                                     <input type="hidden" name="id" value={part._id?.toString() || part.id} />
                                                     <button
