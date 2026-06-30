@@ -17,7 +17,7 @@ export default function EditPart({ params }) {
     const [isLoading, setIsLoading] = useState(true);
 
     const [formData, setFormData] = useState({
-        name: '', category: 'CPU', price: '', specs: ''
+        name: '', category: 'CPU', price: '', specs: '', image: ''
     });
 
     useEffect(() => {
@@ -134,6 +134,11 @@ export default function EditPart({ params }) {
                     <div className="space-y-2">
                         <label htmlFor="specs" className="text-sm font-semibold text-slate-700 dark:text-slate-300">Short Specifications</label>
                         <input type="text" id="specs" required value={formData.specs} onChange={handleChange} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label htmlFor="image" className="text-sm font-semibold text-slate-700 dark:text-slate-300">Image URL</label>
+                        <input type="text" id="image" required value={formData.image} onChange={handleChange} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="https://i.imgur.com/yourimage.jpg" />
                     </div>
 
                     <div className="flex gap-4 mt-8 pt-4 border-t border-slate-200 dark:border-slate-700">
