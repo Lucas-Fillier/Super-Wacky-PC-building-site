@@ -13,9 +13,9 @@ export default function Navbar() {
                 <Link href="/about" className="hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer transition-colors">About</Link>
             </ul>
 
-            <button className="bg-emerald-500 hover:bg-emerald-400 text-white dark:text-slate-950 px-4 py-2 rounded-md font-semibold transition-colors">
-                Sign In
-            </button>
+            <Link href="/login" className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-white dark:text-slate-950 text-lg font-bold rounded-lg shadow-lg shadow-emerald-500/20 transition-all hover:scale-105">
+                Login
+            </Link>
         </nav>
     );
 }
