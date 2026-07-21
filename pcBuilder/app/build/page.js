@@ -1,11 +1,19 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
+import { useSession } from "next-auth/react";
 import PartImage from "@/components/PartImage";
 
 export default function BuildPage() {
     const router = useRouter();
+
+    const {data: session, status} = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect('/login')
+        }
+    })
 
     const [parts, setParts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -36,18 +44,16 @@ export default function BuildPage() {
 
     return (
         <main className="flex flex-col flex-grow bg-slate-50 dark:bg-slate-900 transition-colors duration-200 min-h-screen">
-
             <section className="bg-white dark:bg-slate-950 py-12 px-6 border-b border-slate-200 dark:border-slate-800 text-center transition-colors duration-200">
                 <h1 className="text-4xl font-extrabold mb-4 text-slate-900 dark:text-white">
                     System <span className="text-emerald-600 dark:text-emerald-400">Builder</span>
                 </h1>
                 <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-                    Select your components to see them added to your active build list.
+                    Welcome to Super Wacky PC Builder, <strong>{session?.user?.name}</strong>. Select your components to see them added to your active build list.
                 </p>
             </section>
 
             <div className="max-w-7xl mx-auto py-12 px-6 w-full flex flex-col lg:flex-row gap-8">
-
                 <div className="lg:w-2/3">
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-6 border-b border-slate-200 dark:border-slate-800 pb-2">
                         Available Components
@@ -69,7 +75,7 @@ export default function BuildPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {parts.map((part) => (
                                 <div key={part._id || part.id} className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-colors shadow-sm flex flex-col">
-                                    <PartImage part = {part}/>
+                                    <PartImage part={part}/>
                                     <div className="flex justify-between items-start mb-2">
                                         <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{part.category}</span>
                                         <span className="font-bold text-emerald-600 dark:text-emerald-400">{part.price}</span>
@@ -126,13 +132,6 @@ export default function BuildPage() {
 
                         <div className="flex gap-3 mt-4">
                             <button
-                                onClick={() => {
-                                    if (currentBuild.length > 0) {
-                                        router.push('/saved');
-                                    } else {
-                                        alert("Add some parts before saving!");
-                                    }
-                                }}
                                 className="flex-grow bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-slate-950 font-bold py-3 rounded-lg transition-all"
                             >
                                 Save Build
@@ -148,10 +147,8 @@ export default function BuildPage() {
                                 </button>
                             )}
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </main>
     );

@@ -14,11 +14,9 @@ export default function RootLayout({ children }) {
             <body className="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans min-h-screen flex flex-col transition-colors duration-200">
                 <AuthProvider>
                     <Navbar />
-
                     <main className="flex-grow flex flex-col">
                         {children}
                     </main>
-
                     <Footer />
                 </AuthProvider>
             </body>
