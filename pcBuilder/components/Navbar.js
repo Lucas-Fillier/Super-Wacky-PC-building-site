@@ -8,9 +8,9 @@ export default function Navbar() {
 
     return (
         <nav className="relative flex items-center justify-between p-6 border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 transition-colors duration-200">
-            <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">
+            <Link href="/" className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight hover:opacity-80 transition-opacity">
                 Super Wacky PC Builder
-            </div>
+            </Link>
 
             <ul className="absolute left-1/2 -translate-x-1/2 hidden lg:flex space-x-6 text-sm font-medium text-slate-600 dark:text-slate-300">
                 <Link href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer transition-colors">Home</Link>
@@ -24,8 +24,16 @@ export default function Navbar() {
                 {status === 'loading' ? (
                     <div className="text-emerald-500 font-bold px-8 py-4">Loading...</div>
                 ) : session ? (
-                    <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4 lg:gap-6">
+
+                        <Link
+                            href="/dashboard"
+                            className="hidden md:block px-4 py-2.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 text-sm font-bold rounded-lg transition-colors border border-emerald-200 dark:border-emerald-800"
+                        >
+                            Dashboard
+                        </Link>
+
+                        <Link href="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
                             {session.user.image && (
                                 <img
                                     src={session.user.image}
@@ -41,11 +49,10 @@ export default function Navbar() {
                                     Signed In
                                 </span>
                             </div>
-                        </div>
-
+                        </Link>
                         <button
                             onClick={() => signOut({ callbackUrl: '/' })}
-                            className="px-6 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-red-100 dark:hover:bg-red-900/30 text-slate-700 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 text-sm font-bold rounded-lg transition-colors"
+                            className="px-4 lg:px-6 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-red-100 dark:hover:bg-red-900/30 text-slate-700 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 text-sm font-bold rounded-lg transition-colors"
                         >
                             Sign Out
                         </button>

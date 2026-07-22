@@ -8,7 +8,7 @@ import PartImage from "@/components/PartImage";
 export default function BuildPage() {
     const router = useRouter();
 
-    const {data: session, status} = useSession({
+    const { data: session, status } = useSession({
         required: true,
         onUnauthenticated() {
             redirect('/login')
@@ -19,6 +19,8 @@ export default function BuildPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentBuild, setCurrentBuild] = useState([]);
+
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         const fetchParts = async () => {
@@ -40,6 +42,43 @@ export default function BuildPage() {
     const clearBuild = () => setCurrentBuild([]);
     const removeFromBuild = (indexToRemove) => {
         setCurrentBuild(currentBuild.filter((_, index) => index !== indexToRemove));
+    };
+
+    const handleSaveBuild = async () => {
+        if (currentBuild.length === 0) {
+            alert("Your rig is empty! Add some parts first.");
+            return;
+        }
+
+        const buildName = prompt("Give your wacky rig a name:", "My Awesome Rig");
+        if (!buildName) return;
+
+        setIsSaving(true);
+
+        try {
+            const buildData = {
+                name: buildName,
+                parts: currentBuild,
+            };
+
+            const response = await fetch('/api/builds', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(buildData),
+            });
+
+            if (!response.ok) throw new Error('Failed to save build');
+
+            alert("Build saved successfully!");
+            clearBuild();
+            router.push('/dashboard');
+
+        } catch (error) {
+            console.error(error);
+            alert("There was an error saving your build.");
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -132,9 +171,11 @@ export default function BuildPage() {
 
                         <div className="flex gap-3 mt-4">
                             <button
-                                className="flex-grow bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-slate-950 font-bold py-3 rounded-lg transition-all"
+                                onClick={handleSaveBuild}
+                                disabled={isSaving || currentBuild.length === 0}
+                                className="flex-grow bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-400 dark:disabled:bg-slate-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-slate-950 font-bold py-3 rounded-lg transition-all"
                             >
-                                Save Build
+                                {isSaving ? "Saving..." : "Save Build"}
                             </button>
 
                             {currentBuild.length > 0 && (

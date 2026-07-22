@@ -2,18 +2,41 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function Dashboard() {
     const { data: session, status } = useSession();
     const router = useRouter();
 
+    // State to hold the user's specific data
+    const [savedBuilds, setSavedBuilds] = useState([]);
+    const [isLoadingBuilds, setIsLoadingBuilds] = useState(true);
+
     useEffect(() => {
         if (status === "unauthenticated") {
             router.push("/login");
         }
     }, [status, router]);
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            const fetchUserBuilds = async () => {
+                try {
+                    const response = await fetch('/api/builds');
+                    if (response.ok) {
+                        const data = await response.json();
+                        setSavedBuilds(data);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch builds", error);
+                } finally {
+                    setIsLoadingBuilds(false);
+                }
+            };
+            fetchUserBuilds();
+        }
+    }, [status]);
 
     if (status === "loading") {
         return (
@@ -57,14 +80,29 @@ export default function Dashboard() {
                         </Link>
                     </div>
 
-                    <div className="text-center py-16 bg-slate-50 dark:bg-slate-900/50 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700">
-                        <p className="text-slate-500 dark:text-slate-400 mb-4 font-medium">
-                            You haven't saved any wacky PC builds yet!
-                        </p>
-                        <Link href="/build" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
-                            Click here to start your first build
-                        </Link>
-                    </div>
+                    {isLoadingBuilds ? (
+                        <div className="text-center py-12 text-slate-500 dark:text-slate-400 font-bold animate-pulse">Loading your lab data...</div>
+                    ) : savedBuilds.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {savedBuilds.map((build) => (
+                                <div key={build._id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50">
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">{build.name || "Untitled Build"}</h3>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                                        Saved on: {new Date(build.createdAt).toLocaleDateString()}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-16 bg-slate-50 dark:bg-slate-900/50 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+                            <p className="text-slate-500 dark:text-slate-400 mb-4 font-medium">
+                                You haven't saved any wacky PC builds yet!
+                            </p>
+                            <Link href="/build" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
+                                Click here to start your first build
+                            </Link>
+                        </div>
+                    )}
                 </div>
 
             </div>
