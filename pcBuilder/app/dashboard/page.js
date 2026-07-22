@@ -9,7 +9,6 @@ export default function Dashboard() {
     const { data: session, status } = useSession();
     const router = useRouter();
 
-    // State to hold the user's specific data
     const [savedBuilds, setSavedBuilds] = useState([]);
     const [isLoadingBuilds, setIsLoadingBuilds] = useState(true);
 
@@ -37,6 +36,25 @@ export default function Dashboard() {
             fetchUserBuilds();
         }
     }, [status]);
+
+    const handleDeleteBuild = async (buildId) => {
+        const confirmDelete = window.confirm("Are you sure you want to scrap this build?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch(`/api/builds/${buildId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) throw new Error('Failed to delete');
+
+            setSavedBuilds((prevBuilds) => prevBuilds.filter(build => build._id !== buildId));
+
+        } catch (error) {
+            console.error("Error deleting build:", error);
+            alert("Could not delete the build. Please try again.");
+        }
+    };
 
     if (status === "loading") {
         return (
@@ -85,11 +103,28 @@ export default function Dashboard() {
                     ) : savedBuilds.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {savedBuilds.map((build) => (
-                                <div key={build._id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50">
-                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">{build.name || "Untitled Build"}</h3>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                                        Saved on: {new Date(build.createdAt).toLocaleDateString()}
-                                    </p>
+                                <div key={build._id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 flex flex-col justify-between">
+
+                                    <div>
+                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">{build.name || "Untitled Build"}</h3>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                                            Saved on: {new Date(build.createdAt).toLocaleDateString()}
+                                        </p>
+                                        <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 font-medium">
+                                            {build.parts?.length || 0} Components
+                                        </p>
+                                    </div>
+
+
+                                    <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-end">
+                                        <button
+                                            onClick={() => handleDeleteBuild(build._id)}
+                                            className="text-sm font-bold text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+                                        >
+                                            Scrap Build
+                                        </button>
+                                    </div>
+
                                 </div>
                             ))}
                         </div>
