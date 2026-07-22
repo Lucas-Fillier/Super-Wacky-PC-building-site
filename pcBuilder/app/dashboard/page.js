@@ -12,6 +12,8 @@ export default function Dashboard() {
     const [savedBuilds, setSavedBuilds] = useState([]);
     const [isLoadingBuilds, setIsLoadingBuilds] = useState(true);
 
+    const [expandedBuildId, setExpandedBuildId] = useState(null);
+
     useEffect(() => {
         if (status === "unauthenticated") {
             router.push("/login");
@@ -53,6 +55,14 @@ export default function Dashboard() {
         } catch (error) {
             console.error("Error deleting build:", error);
             alert("Could not delete the build. Please try again.");
+        }
+    };
+
+    const toggleDetails = (buildId) => {
+        if (expandedBuildId === buildId) {
+            setExpandedBuildId(null);
+        } else {
+            setExpandedBuildId(buildId);
         }
     };
 
@@ -101,29 +111,61 @@ export default function Dashboard() {
                     {isLoadingBuilds ? (
                         <div className="text-center py-12 text-slate-500 dark:text-slate-400 font-bold animate-pulse">Loading your lab data...</div>
                     ) : savedBuilds.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4">
                             {savedBuilds.map((build) => (
-                                <div key={build._id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 flex flex-col justify-between">
+                                <div key={build._id} className="p-5 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 flex flex-col transition-all">
 
-                                    <div>
-                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">{build.name || "Untitled Build"}</h3>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                                            Saved on: {new Date(build.createdAt).toLocaleDateString()}
-                                        </p>
-                                        <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 font-medium">
-                                            {build.parts?.length || 0} Components
-                                        </p>
+                                    <div className="flex justify-between items-start md:items-center flex-col md:flex-row gap-4">
+                                        <div>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{build.name || "Untitled Build"}</h3>
+                                            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                                                Saved on: {new Date(build.createdAt).toLocaleDateString()}
+                                            </p>
+                                            <p className="text-sm text-slate-600 dark:text-slate-400 font-medium mt-1">
+                                                {build.parts?.length || 0} Components
+                                            </p>
+                                        </div>
+
+                                        <div className="flex items-center gap-4 w-full md:w-auto">
+                                            <button
+                                                onClick={() => toggleDetails(build._id)}
+                                                className="flex-grow md:flex-grow-0 px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-emerald-500 dark:hover:bg-emerald-500 text-slate-700 dark:text-slate-300 hover:text-white dark:hover:text-white text-sm font-bold rounded-lg transition-colors"
+                                            >
+                                                {expandedBuildId === build._id ? "Hide Details" : "View Build"}
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleDeleteBuild(build._id)}
+                                                className="px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 text-sm font-bold rounded-lg transition-colors"
+                                            >
+                                                Scrap
+                                            </button>
+                                        </div>
                                     </div>
 
+                                    {expandedBuildId === build._id && (
+                                        <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+                                            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-4 uppercase tracking-wider">
+                                                Parts List
+                                            </h4>
 
-                                    <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-end">
-                                        <button
-                                            onClick={() => handleDeleteBuild(build._id)}
-                                            className="text-sm font-bold text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
-                                        >
-                                            Scrap Build
-                                        </button>
-                                    </div>
+                                            {build.parts && build.parts.length > 0 ? (
+                                                <ul className="space-y-3">
+                                                    {build.parts.map((part, index) => (
+                                                        <li key={index} className="flex justify-between items-center bg-white dark:bg-slate-800 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
+                                                            <div className="flex flex-col">
+                                                                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">{part.category}</span>
+                                                                <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{part.name}</span>
+                                                            </div>
+                                                            <span className="font-bold text-slate-700 dark:text-slate-300">{part.price}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <p className="text-sm text-slate-500">No parts found in this build.</p>
+                                            )}
+                                        </div>
+                                    )}
 
                                 </div>
                             ))}
