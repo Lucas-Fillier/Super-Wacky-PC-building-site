@@ -1,3 +1,4 @@
+// app/build/page.js
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -8,7 +9,7 @@ import PartImage from "@/components/PartImage";
 export default function BuildPage() {
     const router = useRouter();
 
-    const {data: session, status} = useSession({
+    const { data: session, status } = useSession({
         required: true,
         onUnauthenticated() {
             redirect('/login')
@@ -19,6 +20,7 @@ export default function BuildPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentBuild, setCurrentBuild] = useState([]);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         const fetchParts = async () => {
@@ -40,6 +42,53 @@ export default function BuildPage() {
     const clearBuild = () => setCurrentBuild([]);
     const removeFromBuild = (indexToRemove) => {
         setCurrentBuild(currentBuild.filter((_, index) => index !== indexToRemove));
+    };
+
+    const calculateTotal = () => {
+        const total = currentBuild.reduce((sum, item) => {
+            const numericPrice = parseFloat(item.price.replace(/[^0-9.-]+/g, "")) || 0;
+            return sum + numericPrice;
+        }, 0);
+
+        return total.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    };
+
+    const handleSaveBuild = async () => {
+        if (currentBuild.length === 0) {
+            alert("Your rig is empty! Add some parts first.");
+            return;
+        }
+
+        const buildName = prompt("Give your wacky rig a name:", "My Awesome Rig");
+        if (!buildName) return;
+
+        setIsSaving(true);
+
+        try {
+            const buildData = {
+                name: buildName,
+                parts: currentBuild,
+                totalPrice: calculateTotal(),
+            };
+
+            const response = await fetch('/api/builds', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(buildData),
+            });
+
+            if (!response.ok) throw new Error('Failed to save build');
+
+            alert("Build saved successfully!");
+            clearBuild();
+            router.push('/dashboard');
+
+        } catch (error) {
+            console.error(error);
+            alert("There was an error saving your build.");
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -106,7 +155,7 @@ export default function BuildPage() {
                                 Your build is completely empty. Start adding parts!
                             </p>
                         ) : (
-                            <ul className="space-y-3 mb-6">
+                            <ul className="space-y-3 mb-2">
                                 {currentBuild.map((item, index) => (
                                     <li key={index} className="flex justify-between items-center text-sm bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-700 group">
                                         <div className="flex-grow">
@@ -130,11 +179,20 @@ export default function BuildPage() {
                             </ul>
                         )}
 
-                        <div className="flex gap-3 mt-4">
+                        {currentBuild.length > 0 && (
+                            <div className="flex justify-between items-center py-4 mt-2 border-t border-slate-200 dark:border-slate-700 mb-2">
+                                <span className="text-lg font-bold text-slate-900 dark:text-slate-100">Total Estimate</span>
+                                <span className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{calculateTotal()}</span>
+                            </div>
+                        )}
+
+                        <div className="flex gap-3">
                             <button
-                                className="flex-grow bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-slate-950 font-bold py-3 rounded-lg transition-all"
+                                onClick={handleSaveBuild}
+                                disabled={isSaving || currentBuild.length === 0}
+                                className="flex-grow bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-400 dark:disabled:bg-slate-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-slate-950 font-bold py-3 rounded-lg transition-all"
                             >
-                                Save Build
+                                {isSaving ? "Saving..." : "Save Build"}
                             </button>
 
                             {currentBuild.length > 0 && (
