@@ -1,3 +1,4 @@
+// app/dashboard/page.js
 "use client";
 
 import { useSession } from "next-auth/react";
@@ -11,7 +12,6 @@ export default function Dashboard() {
 
     const [savedBuilds, setSavedBuilds] = useState([]);
     const [isLoadingBuilds, setIsLoadingBuilds] = useState(true);
-
     const [expandedBuildId, setExpandedBuildId] = useState(null);
 
     useEffect(() => {
@@ -121,17 +121,25 @@ export default function Dashboard() {
                                             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                                                 Saved on: {new Date(build.createdAt).toLocaleDateString()}
                                             </p>
-                                            <p className="text-sm text-slate-600 dark:text-slate-400 font-medium mt-1">
-                                                {build.parts?.length || 0} Components
-                                            </p>
+
+                                            <div className="flex items-center gap-4 mt-2">
+                                                <span className="text-sm text-slate-600 dark:text-slate-400 font-medium">
+                                                    {build.parts?.length || 0} Components
+                                                </span>
+                                                {build.totalPrice && (
+                                                    <span className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/30 px-2 py-0.5 rounded">
+                                                        Total: {build.totalPrice}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
 
-                                        <div className="flex items-center gap-4 w-full md:w-auto">
+                                        <div className="flex items-center gap-4 w-full md:w-auto mt-2 md:mt-0">
                                             <button
                                                 onClick={() => toggleDetails(build._id)}
                                                 className="flex-grow md:flex-grow-0 px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-emerald-500 dark:hover:bg-emerald-500 text-slate-700 dark:text-slate-300 hover:text-white dark:hover:text-white text-sm font-bold rounded-lg transition-colors"
                                             >
-                                                {expandedBuildId === build._id ? "Hide Details" : "View Build"}
+                                                {expandedBuildId === build._id ? "Hide Details" : "View Rig"}
                                             </button>
 
                                             <button
