@@ -1,3 +1,4 @@
+// app/build/page.js
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -19,7 +20,6 @@ export default function BuildPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentBuild, setCurrentBuild] = useState([]);
-
     const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
@@ -44,6 +44,15 @@ export default function BuildPage() {
         setCurrentBuild(currentBuild.filter((_, index) => index !== indexToRemove));
     };
 
+    const calculateTotal = () => {
+        const total = currentBuild.reduce((sum, item) => {
+            const numericPrice = parseFloat(item.price.replace(/[^0-9.-]+/g, "")) || 0;
+            return sum + numericPrice;
+        }, 0);
+
+        return total.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    };
+
     const handleSaveBuild = async () => {
         if (currentBuild.length === 0) {
             alert("Your rig is empty! Add some parts first.");
@@ -59,6 +68,7 @@ export default function BuildPage() {
             const buildData = {
                 name: buildName,
                 parts: currentBuild,
+                totalPrice: calculateTotal(),
             };
 
             const response = await fetch('/api/builds', {
@@ -145,7 +155,7 @@ export default function BuildPage() {
                                 Your build is completely empty. Start adding parts!
                             </p>
                         ) : (
-                            <ul className="space-y-3 mb-6">
+                            <ul className="space-y-3 mb-2">
                                 {currentBuild.map((item, index) => (
                                     <li key={index} className="flex justify-between items-center text-sm bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-700 group">
                                         <div className="flex-grow">
@@ -169,7 +179,14 @@ export default function BuildPage() {
                             </ul>
                         )}
 
-                        <div className="flex gap-3 mt-4">
+                        {currentBuild.length > 0 && (
+                            <div className="flex justify-between items-center py-4 mt-2 border-t border-slate-200 dark:border-slate-700 mb-2">
+                                <span className="text-lg font-bold text-slate-900 dark:text-slate-100">Total Estimate</span>
+                                <span className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{calculateTotal()}</span>
+                            </div>
+                        )}
+
+                        <div className="flex gap-3">
                             <button
                                 onClick={handleSaveBuild}
                                 disabled={isSaving || currentBuild.length === 0}
