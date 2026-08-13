@@ -244,9 +244,21 @@ export default function BuildPage() {
                                 <button
                                     onClick={handleAnalyzeBuild}
                                     disabled={isAnalyzing}
-                                    className="w-full bg-slate-800 hover:bg-slate-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+                                    className="w-full relative overflow-hidden bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-500 hover:via-purple-500 hover:to-indigo-500 bg-[length:200%_auto] hover:bg-right disabled:from-slate-400 disabled:to-slate-400 dark:disabled:from-slate-700 dark:disabled:to-slate-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg hover:shadow-indigo-500/25 hover:-translate-y-0.5 disabled:hover:translate-y-0 disabled:shadow-none transition-all duration-500 flex items-center justify-center gap-3"
                                 >
-                                    {isAnalyzing ? "Analyzing Components..." : "Analyze Build"}
+                                    {isAnalyzing ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            <span>Analyzing...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <svg className="w-5 h-5 text-purple-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                            </svg>
+                                            <span>Run Analysis</span>
+                                        </>
+                                    )}
                                 </button>
                             )}
 
