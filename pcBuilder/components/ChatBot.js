@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function PCChatbot() {
     const [messages, setMessages] = useState([
@@ -12,14 +12,57 @@ export default function PCChatbot() {
         }
     ]);
     const [input, setInput] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSend = (e) => {
+    const messagesEndRef = useRef(null);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+    }, [messages]);
+
+    const handleSend = async (e) => {
         e.preventDefault();
-        if (!input.trim()) return;
+        if (!input.trim() || isLoading) return;
 
         const userMessage = { sender: "user", message: input };
-        setMessages([...messages, userMessage]);
+        const updatedHistory = [...messages, userMessage];
+
+        setMessages(updatedHistory);
         setInput("");
+        setIsLoading(true);
+
+        try {
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chatHistory: updatedHistory }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || "Failed to talk to PC Guru");
+
+            setMessages((prev) => [
+                ...prev,
+                {
+                    sender: "bot",
+                    message: data.reply.message,
+                    techTip: data.reply.techTip,
+                    dangerRating: data.reply.dangerRating,
+                    suggestedCategory: data.reply.suggestedCategory
+                }
+            ]);
+        } catch (err) {
+            setMessages((prev) => [
+                ...prev,
+                { sender: "bot", message: "My thermal paste melted! Something went wrong generating that response.", dangerRating: "Error" }
+            ]);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -64,6 +107,7 @@ export default function PCChatbot() {
                         </div>
                     </div>
                 ))}
+                <div ref={messagesEndRef} />
             </div>
 
             <form onSubmit={handleSend} className="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex gap-2">
@@ -76,10 +120,10 @@ export default function PCChatbot() {
                 />
                 <button
                     type="submit"
-                    disabled={!input.trim()}
+                    disabled={isLoading || !input.trim()}
                     className="bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white px-5 py-2 rounded-lg font-bold transition-all"
                 >
-                    Send
+                    {isLoading ? "..." : "Send"}
                 </button>
             </form>
         </div>
