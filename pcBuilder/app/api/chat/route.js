@@ -14,10 +14,9 @@ const groqModels = createGroq({
 });
 
 const chatResponseSchema = z.object({
-    message: z.string().min(1).describe("The AI assistant response answering the user PC building question"),
-    techTip: z.string().describe("A short hardware tip. MUST return an empty string if a tip is not relevant to the specific prompt."),
-    dangerRating: z.string().describe("Humorous risk assessment using NO dash characters. MUST return an empty string if the user is not asking about a specific risky build or action."),
-    suggestedCategory: z.string().describe("Component category related to prompt like CPU, GPU, Cooling, or General")
+    message: z.string().describe("The support response to the user's question."),
+    suggestedLink: z.string().describe("A relevant URL path on our site to direct them to (e.g., '/build', '/dashboard', or '/login'). Return an empty string if no link is needed."),
+    ticketCategory: z.string().describe("Categorize the issue: 'Account/Login', 'Shipping/Returns', 'Site Navigation', or 'General Help'")
 });
 
 export async function POST(request) {
@@ -28,8 +27,17 @@ export async function POST(request) {
             return NextResponse.json({ error: "No chat history provided." }, { status: 400 });
         }
 
-        const SYSTEM_PROMPT = `You are "Wacky PC Guru", an expert yet humorous PC building assistant on a PC building website. Answer user questions about custom PC building, hardware compatibility, cooling, and specs. Be helpful, witty, and enthusiastic about hardware.
-        IMPORTANT: Only provide a techTip and dangerRating if the user is explicitly asking about a specific build, a compatibility check, or doing something potentially risky. If they are just asking for general recommendations, return empty strings ("") for those fields.`;
+        const SYSTEM_PROMPT = `You are the Customer Support Agent for the "Super Wacky PC Building Site". Your job is to help users navigate the site, understand policies, and troubleshoot their accounts. Do not analyze hardware or build PCs—tell users to use the "Auto-Builder" tool for that.
+
+        SITE KNOWLEDGE BASE:
+        - Navigation: The custom PC builder is located at "/build". Saved builds are on the "/dashboard".
+        - Shipping Policy: We ship all parts via high-speed catapult within 3-5 business days. 
+        - Return Policy: We accept returns within 30 days, provided the components have not been melted, exploded, or covered in mayonnaise.
+        - Compatibility: If a user asks why parts are incompatible, explain that our Wacky Builder checks socket types, form factors, and power draw automatically.
+        - Account Issues: Users must be logged in via Google to save their builds.
+        
+        IMPORTANT FORMATTING RULE:
+        Never include raw URL paths (like "/build" or "/dashboard") directly in your conversational message string. Use natural language instead (e.g., "head over to our builder page") and let the 'suggestedLink' field handle providing the actual URL path.`;
 
         const result = await generateText({
             model: groqModels("openai/gpt-oss-20b"),

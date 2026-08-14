@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from 'next/link';
 
 export default function PCChatbot() {
     const [messages, setMessages] = useState([
         {
             sender: "bot",
-            message: "Hey there! I'm your Wacky PC Guru. Ask me anything about PC hardware, compatibility, or insane cooling setups!",
-            dangerRating: "Safe",
-            techTip: "Always remember to peel the clear plastic off the CPU cooler bottom!"
+            message: "Welcome to Wacky Support! I can help you find your saved builds, navigate the site, or explain our bizarre shipping policies. What do you need help with?",
+            ticketCategory: "General Help",
+            suggestedLink: ""
         }
     ]);
     const [input, setInput] = useState("");
@@ -50,9 +51,8 @@ export default function PCChatbot() {
                 {
                     sender: "bot",
                     message: data.reply.message,
-                    techTip: data.reply.techTip,
-                    dangerRating: data.reply.dangerRating,
-                    suggestedCategory: data.reply.suggestedCategory
+                    ticketCategory: data.reply.ticketCategory,
+                    suggestedLink: data.reply.suggestedLink
                 }
             ]);
         } catch (err) {
@@ -78,28 +78,19 @@ export default function PCChatbot() {
 
             <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50 dark:bg-slate-900">
                 {messages.map((msg, idx) => (
-                    <div
-                        key={idx}
-                        className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}
-                    >
-                        <div
-                            className={`max-w-[85%] rounded-2xl p-4 text-sm shadow-sm ${
-                                msg.sender === "user"
-                                    ? "bg-emerald-600 text-white rounded-br-none"
-                                    : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-bl-none"
-                            }`}
-                        >
+                    <div key={idx} className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}>
+                        <div className={`max-w-[85%] rounded-2xl p-4 text-sm shadow-sm ${msg.sender === "user" ? "bg-emerald-600 text-white rounded-br-none" : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-bl-none"}`}>
                             <p className="whitespace-pre-wrap">{msg.message}</p>
-                            {msg.sender === "bot" && msg.techTip && (
+                            {msg.sender === "bot" && msg.ticketCategory && (
                                 <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 space-y-2">
                                     <div className="flex items-center gap-2 flex-wrap text-xs">
-                                        <span className="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-bold px-2 py-0.5 rounded">
-                                            💡 Tech Tip: {msg.techTip}
-                                        </span>
-                                        {msg.dangerRating && (
-                                            <span className="bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 font-bold px-2 py-0.5 rounded">
-                                                ⚠️ Risk: {msg.dangerRating}
-                                            </span>
+                            <span className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold px-2 py-0.5 rounded">
+                                🏷️ Category: {msg.ticketCategory}
+                            </span>
+                                        {msg.suggestedLink && (
+                                            <Link href={msg.suggestedLink} className="inline-flex items-center bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 font-bold px-3 py-1.5 rounded-md border border-emerald-200 dark:border-emerald-800/50 shadow-sm hover:bg-emerald-200 dark:hover:bg-emerald-800/50 hover:-translate-y-0.5 transition-all cursor-pointer capitalize">
+                                                🔗 Go to {msg.suggestedLink.replace('/', '')}
+                                            </Link>
                                         )}
                                     </div>
                                 </div>
