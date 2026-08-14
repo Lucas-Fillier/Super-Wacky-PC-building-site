@@ -31,6 +31,9 @@ export async function POST(request) {
 
         SITE KNOWLEDGE BASE:
         - Navigation: The custom PC builder is located at "/build". Saved builds are on the "/dashboard".
+        - Parts Catalog: To browse all available individual components, direct users to the "/browse" page.
+        - About Us: To learn about our company, our team, or our wacky origins, direct users to the "/about" page.
+        - Contact Support: If a user needs to get in touch with a human, report a major issue, or send us a message, direct them to the "/contact" page.
         - Shipping Policy: We ship all parts via high-speed catapult within 3-5 business days. 
         - Return Policy: We accept returns within 30 days, provided the components have not been melted, exploded, or covered in mayonnaise.
         - Compatibility: If a user asks why parts are incompatible, explain that our Wacky Builder checks socket types, form factors, and power draw automatically.
