@@ -24,6 +24,9 @@ export default function BuildPage() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [aiAnalysis, setAiAnalysis] = useState(null);
 
+    const [isAutoBuilding, setIsAutoBuilding] = useState(false);
+    const [autoBuildMessage, setAutoBuildMessage] = useState(null);
+
     useEffect(() => {
         const fetchParts = async () => {
             try {
@@ -48,6 +51,7 @@ export default function BuildPage() {
     const clearBuild = () => {
         setCurrentBuild([]);
         setAiAnalysis(null);
+        setAutoBuildMessage(null);
     };
 
     const removeFromBuild = (indexToRemove) => {
@@ -60,28 +64,59 @@ export default function BuildPage() {
             const numericPrice = parseFloat(item.price.replace(/[^0-9.-]+/g, "")) || 0;
             return sum + numericPrice;
         }, 0);
-
         return total.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    };
+
+    const handleAutoBuild = async (tier) => {
+        if (parts.length === 0) return;
+
+        setIsAutoBuilding(true);
+        setAutoBuildMessage(null);
+        setAiAnalysis(null);
+
+        try {
+            const response = await fetch('/api/auto-build', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tier: tier, inventory: parts }),
+            });
+
+            if (!response.ok) throw new Error('Auto-build failed');
+
+            const data = await response.json();
+
+            const selectedParts = data.selectedPartIds.map(id =>
+                parts.find(p => (p._id || p.id) === id)
+            ).filter(Boolean);
+
+            setCurrentBuild(selectedParts);
+
+            setAutoBuildMessage({
+                name: data.buildName,
+                explanation: data.explanation
+            });
+
+        } catch (error) {
+            console.error(error);
+            alert("The AI got confused browsing the store. Please try again.");
+        } finally {
+            setIsAutoBuilding(false);
+        }
     };
 
     const handleAnalyzeBuild = async () => {
         if (currentBuild.length === 0) return;
-
         setIsAnalyzing(true);
         setAiAnalysis(null);
-
         try {
             const response = await fetch('/api/analyze-build', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ parts: currentBuild }),
             });
-
             if (!response.ok) throw new Error('Failed to reach AI');
-
             const data = await response.json();
             setAiAnalysis(data);
-
         } catch (error) {
             console.error(error);
             alert("AI failed to analyze your rig. Please try again.");
@@ -92,13 +127,10 @@ export default function BuildPage() {
 
     const handleSaveBuild = async () => {
         if (currentBuild.length === 0) return;
-
-        const defaultName = aiAnalysis?.buildName || "My Awesome Rig";
+        const defaultName = aiAnalysis?.buildName || autoBuildMessage?.name || "My Awesome Rig";
         const buildName = prompt("Give your rig a name:", defaultName);
         if (!buildName) return;
-
         setIsSaving(true);
-
         try {
             const buildData = {
                 name: buildName,
@@ -106,19 +138,15 @@ export default function BuildPage() {
                 totalPrice: calculateTotal(),
                 aiAnalysis: aiAnalysis
             };
-
             const response = await fetch('/api/builds', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(buildData),
             });
-
             if (!response.ok) throw new Error('Failed to save build');
-
             alert("Build saved successfully!");
             clearBuild();
             router.push('/dashboard');
-
         } catch (error) {
             console.error(error);
             alert("There was an error saving your build.");
@@ -134,12 +162,52 @@ export default function BuildPage() {
                     System <span className="text-emerald-600 dark:text-emerald-400">Builder</span>
                 </h1>
                 <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-                    Welcome to Super Wacky PC Builder, <strong>{session?.user?.name}</strong>. Select your components to see them added to your active build list.
+                    Welcome to Super Wacky PC Builder, <strong>{session?.user?.name}</strong>. Select your components or let our AI build it for you!
                 </p>
             </section>
 
             <div className="max-w-7xl mx-auto py-12 px-6 w-full flex flex-col lg:flex-row gap-8">
                 <div className="lg:w-2/3">
+
+                    <div className="bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-200 dark:border-indigo-800/50 rounded-2xl p-6 mb-8">
+                        <h2 className="text-xl font-bold text-indigo-900 dark:text-indigo-300 mb-2 flex items-center gap-2">
+                            <span>✨</span> AI Auto-Builder
+                        </h2>
+                        <p className="text-sm text-indigo-700 dark:text-indigo-400 mb-4">
+                            Not sure what to pick? Tell the AI what kind of performance you want, and it will instantly draft a compatible build from our current inventory.
+                        </p>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <button
+                                onClick={() => handleAutoBuild("Low-End / Budget")}
+                                disabled={isAutoBuilding || parts.length === 0}
+                                className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition-all disabled:opacity-50"
+                            >
+                                🥉 Budget
+                            </button>
+                            <button
+                                onClick={() => handleAutoBuild("Mid-Range / Solid 1080p")}
+                                disabled={isAutoBuilding || parts.length === 0}
+                                className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition-all disabled:opacity-50"
+                            >
+                                🥈 Mid-Range
+                            </button>
+                            <button
+                                onClick={() => handleAutoBuild("High-End / 4K Gaming")}
+                                disabled={isAutoBuilding || parts.length === 0}
+                                className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition-all disabled:opacity-50"
+                            >
+                                🥇 High-End
+                            </button>
+                        </div>
+
+                        {isAutoBuilding && (
+                            <div className="mt-4 text-center text-sm font-bold text-indigo-600 dark:text-indigo-400 animate-pulse">
+                                The AI is browsing the shelves...
+                            </div>
+                        )}
+                    </div>
+
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-6 border-b border-slate-200 dark:border-slate-800 pb-2">
                         Available Components
                     </h2>
@@ -210,6 +278,13 @@ export default function BuildPage() {
                             </div>
                         )}
 
+                        {autoBuildMessage && !aiAnalysis && (
+                            <div className="mb-4 bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-xl border border-indigo-200 dark:border-indigo-800">
+                                <h3 className="font-black text-sm text-indigo-700 dark:text-indigo-400 mb-1">{autoBuildMessage.name}</h3>
+                                <p className="text-xs text-slate-700 dark:text-slate-300">{autoBuildMessage.explanation}</p>
+                            </div>
+                        )}
+
                         {aiAnalysis && (
                             <div className="mb-4 bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-sm">
                                 <div className="flex justify-between items-start mb-3">
@@ -256,7 +331,7 @@ export default function BuildPage() {
                                             <svg className="w-5 h-5 text-purple-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                             </svg>
-                                            <span>Run Analysis</span>
+                                            <span>Run AI Build Analysis</span>
                                         </>
                                     )}
                                 </button>
