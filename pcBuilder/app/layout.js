@@ -1,7 +1,8 @@
 import './globals.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import AuthProvider from "@/components/AuthProvider";
+import AuthProvider from "../components/AuthProvider";
+import PCChatbot from "../components/ChatBot";
 
 export const metadata = {
     title: 'Super Wacky PC Builder',
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
                         {children}
                     </main>
                     <Footer />
+                    <PCChatbot/>
                 </AuthProvider>
             </body>
         </html>
